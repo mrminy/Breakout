@@ -34,14 +34,13 @@ public class Controller {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
 		final Game game = new Game();
 
+		canvas.setFocusTraversable(true);
 		canvas.addEventHandler(KeyEvent.KEY_PRESSED, new javafx.event.EventHandler<KeyEvent>() {
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.LEFT) {
 					leftKey = true;
-					event.consume();
 				} else if (event.getCode() == KeyCode.RIGHT) {
 					rightKey = true;
-					event.consume();
 				}
 			}
 		});
@@ -50,10 +49,8 @@ public class Controller {
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.LEFT) {
 					leftKey = false;
-					event.consume();
 				} else if (event.getCode() == KeyCode.RIGHT) {
 					rightKey = false;
-					event.consume();
 				}
 			}
 		});
@@ -69,7 +66,6 @@ public class Controller {
 				if (accumulator > dt) {
 					// One time step in the game
 					// TODO update game/logic
-					System.out.println(leftKey + " - " + rightKey);
 					game.update(leftKey, rightKey);
 					accumulator -= dt;
 					timeStepCounter++;

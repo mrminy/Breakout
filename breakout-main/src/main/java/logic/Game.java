@@ -1,5 +1,7 @@
 package logic;
 
+import utils.Utils;
+
 /**
  * Created by mikkel on 21-Jul-16.
  */
@@ -31,9 +33,9 @@ public class Game {
 	public void update(boolean leftKey, boolean rightKey) {
 		// TODO update the state based on the left/rightKey is true
 		if(leftKey){
-			paddle.move(-10);
+			paddle.move(-Utils.PADDLE_DEFAULT_SPEED);
 		}else if(rightKey){
-			paddle.move(-10);
+			paddle.move(Utils.PADDLE_DEFAULT_SPEED);
 		}
 	}
 }

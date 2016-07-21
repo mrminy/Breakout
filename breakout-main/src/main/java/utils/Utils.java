@@ -5,6 +5,6 @@ package utils;
  */
 public class Utils {
 	public static final double G_WIDTH = 800, G_HEIGHT = 600, MENU_HEIGHT = 40, BALL_RADIUS = 5,
-			DEFAULT_PADDLE_SIZE = 10;
+			DEFAULT_PADDLE_WIDTH = 120, PADDLE_HEIGHT = 15;
 
 }

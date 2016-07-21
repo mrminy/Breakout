@@ -17,18 +17,13 @@ public class Controller {
 	public Label menuTitle;
 	public Canvas canvas;
 
-	private final Physics physics;
-
 	private long startTime;
 	private long frameCounter;
 	private double fps;
 
-	public Controller(Physics physics) {
-		this.physics = physics;
-	}
-
 	public void initialize() {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
+		final Physics physics = new Physics();
 
 
 		new AnimationTimer() {
@@ -39,12 +34,12 @@ public class Controller {
 				physics.update();
 
 
-				render(gc);
+				render(gc, physics);
 			}
 		}.start();
 	}
 
-	private void render(final GraphicsContext gc) {
+	private void render(final GraphicsContext gc, final Physics physics) {
 		gc.clearRect(0, 0, Utils.G_WIDTH, Utils.G_HEIGHT);
 
 		// TODO render graphics

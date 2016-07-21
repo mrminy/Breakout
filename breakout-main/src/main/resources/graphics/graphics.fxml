@@ -1,0 +1,22 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import utils.*?>
+<GridPane fx:controller="controller.Controller"
+          xmlns:fx="http://javafx.com/fxml">
+    <prefWidth><Utils fx:constant="G_WIDTH"/></prefWidth>
+
+    <HBox spacing="15" GridPane.rowIndex="0" style="-fx-background-color:#CDCDCD">
+        <prefWidth><Utils fx:constant="G_WIDTH"/></prefWidth>
+        <prefHeight><Utils fx:constant="MENU_HEIGHT"/></prefHeight>
+        <padding><Insets top="25" right="25" bottom="25" left="25"/></padding>
+        <Label fx:id="menuTitle">Menu</Label>
+    </HBox>
+
+    <Canvas fx:id="canvas" GridPane.rowIndex="1">
+        <width><Utils fx:constant="G_WIDTH"/></width>
+        <height><Utils fx:constant="G_HEIGHT"/></height>
+    </Canvas>
+</GridPane>

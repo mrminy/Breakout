@@ -31,11 +31,11 @@ public class Game {
 		return paddle.getX();
 	}
 
-	public double getBallYPos(){
+	public double getBallYPos() {
 		return ball.getY();
 	}
 
-	public double getBallXPos(){
+	public double getBallXPos() {
 		return ball.getX();
 	}
 
@@ -45,10 +45,11 @@ public class Game {
 
 	public void update(boolean leftKey, boolean rightKey) {
 		// TODO update the state based on the left/rightKey is true
-		boolean insideBorder = paddle.getX() > PADDLE_DEFAULT_SPEED && paddle.getX() < G_WIDTH-DEFAULT_PADDLE_WIDTH-PADDLE_DEFAULT_SPEED;
-		if(leftKey ){
+		boolean isLeftMovePossible = paddle.getX() >= PADDLE_DEFAULT_SPEED;
+		boolean isRightMovePossible = paddle.getX() <= G_WIDTH - DEFAULT_PADDLE_WIDTH - PADDLE_DEFAULT_SPEED;
+		if (leftKey && isLeftMovePossible) {
 			paddle.move(-PADDLE_DEFAULT_SPEED);
-		}else if(rightKey){
+		} else if (rightKey && isRightMovePossible) {
 			paddle.move(PADDLE_DEFAULT_SPEED);
 		}
 	}

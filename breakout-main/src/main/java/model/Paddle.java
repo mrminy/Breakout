@@ -9,7 +9,7 @@ public class Paddle {
 	private final Position position;
 
 	public Paddle() {
-		position = new Position(0, 0);
+		position = new Position(100, 0);
 	}
 
 	public double getY() {

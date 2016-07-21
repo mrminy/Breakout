@@ -1,5 +1,7 @@
 package logic;
 
+import model.Board;
+import model.Paddle;
 import utils.Utils;
 
 /**

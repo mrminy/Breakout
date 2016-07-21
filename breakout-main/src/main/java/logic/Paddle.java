@@ -19,4 +19,8 @@ public class Paddle {
 	public double getX() {
 		return position.getX();
 	}
+
+	public void move(double deltaX){
+		position.setX(position.getX() + deltaX);
+	}
 }

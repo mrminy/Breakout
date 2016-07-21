@@ -4,8 +4,10 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import logic.Physics;
+import logic.Game;
 import utils.Utils;
 
 import java.text.DecimalFormat;
@@ -20,31 +22,70 @@ public class Controller {
 	private long startTime;
 	private long frameCounter;
 	private double fps;
+	private int timeStepCounter = 0;
+	private long frameStart;
+	private double targetFps = Utils.ANIMATION_FPS;
+	private double dt = 1000.0 / targetFps;
+	private double accumulator = 0.0;
+
+	private boolean leftKey = false, rightKey = false;
 
 	public void initialize() {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
-		final Physics physics = new Physics();
+		final Game game = new Game();
+
+		canvas.addEventHandler(KeyEvent.KEY_PRESSED, new javafx.event.EventHandler<KeyEvent>() {
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.LEFT) {
+					leftKey = true;
+					event.consume();
+				} else if (event.getCode() == KeyCode.RIGHT) {
+					rightKey = true;
+					event.consume();
+				}
+			}
+		});
+
+		canvas.addEventHandler(KeyEvent.KEY_RELEASED, new javafx.event.EventHandler<KeyEvent>() {
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.LEFT) {
+					leftKey = false;
+					event.consume();
+				} else if (event.getCode() == KeyCode.RIGHT) {
+					rightKey = false;
+					event.consume();
+				}
+			}
+		});
 
 
 		new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				// TODO delta for specifying when the logic is going to be updated
-				// TODO update physics/logic
-				physics.update();
+				long currentTime = System.currentTimeMillis();
+				accumulator += currentTime - frameStart;
+				frameStart = currentTime;
 
+				if (accumulator > dt) {
+					// One time step in the game
+					// TODO update game/logic
+					System.out.println(leftKey + " - " + rightKey);
+					game.update(leftKey, rightKey);
+					accumulator -= dt;
+					timeStepCounter++;
+				}
 
-				render(gc, physics);
+				render(gc, game);
 			}
 		}.start();
 	}
 
-	private void render(final GraphicsContext gc, final Physics physics) {
+	private void render(final GraphicsContext gc, final Game game) {
 		gc.clearRect(0, 0, Utils.G_WIDTH, Utils.G_HEIGHT);
 
 		// TODO render graphics
 		gc.setFill(Color.DARKCYAN);
-		gc.fillRect(physics.getPaddleXPos(), Utils.G_HEIGHT - Utils.PADDLE_HEIGHT * 2 - 10,
+		gc.fillRect(game.getPaddleXPos(), Utils.G_HEIGHT - Utils.PADDLE_HEIGHT * 2 - 10,
 				Utils.DEFAULT_PADDLE_WIDTH, Utils.PADDLE_HEIGHT);
 
 		// Draws fps info in top left corner

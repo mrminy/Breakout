@@ -3,11 +3,11 @@ package logic;
 /**
  * Created by mikkel on 21-Jul-16.
  */
-public class Physics {
+public class Game {
 	private final Paddle paddle;
 	private final Board board;
 
-	public Physics() {
+	public Game() {
 		this.paddle = new Paddle();
 		this.board = new Board();
 	}
@@ -16,11 +16,11 @@ public class Physics {
 		return paddle;
 	}
 
-	public double getPaddleXPos(){
+	public double getPaddleXPos() {
 		return paddle.getX();
 	}
 
-	public double getPaddleYPos(){
+	public double getPaddleYPos() {
 		return paddle.getY();
 	}
 
@@ -28,7 +28,12 @@ public class Physics {
 		return board;
 	}
 
-	public void update(){
-
+	public void update(boolean leftKey, boolean rightKey) {
+		// TODO update the state based on the left/rightKey is true
+		if(leftKey){
+			paddle.move(-10);
+		}else if(rightKey){
+			paddle.move(-10);
+		}
 	}
 }

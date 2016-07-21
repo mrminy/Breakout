@@ -22,7 +22,6 @@ public class Controller {
 	private long startTime;
 	private long frameCounter;
 	private double fps;
-	private int timeStepCounter = 0;
 	private long frameStart;
 	private double targetFps = Utils.ANIMATION_FPS;
 	private double dt = 1000.0 / targetFps;
@@ -34,6 +33,28 @@ public class Controller {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
 		final Game game = new Game();
 
+		addKeyHandlers();
+
+		new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				long currentTime = System.currentTimeMillis();
+				accumulator += currentTime - frameStart;
+				frameStart = currentTime;
+
+				if (accumulator > dt) {
+					// One time step in the game
+					// TODO update game/logic
+					game.update(leftKey, rightKey);
+					accumulator -= dt;
+				}
+
+				render(gc, game);
+			}
+		}.start();
+	}
+
+	private void addKeyHandlers(){
 		canvas.setFocusTraversable(true);
 		canvas.addEventHandler(KeyEvent.KEY_PRESSED, new javafx.event.EventHandler<KeyEvent>() {
 			public void handle(KeyEvent event) {
@@ -54,32 +75,14 @@ public class Controller {
 				}
 			}
 		});
-
-
-		new AnimationTimer() {
-			@Override
-			public void handle(long now) {
-				long currentTime = System.currentTimeMillis();
-				accumulator += currentTime - frameStart;
-				frameStart = currentTime;
-
-				if (accumulator > dt) {
-					// One time step in the game
-					// TODO update game/logic
-					game.update(leftKey, rightKey);
-					accumulator -= dt;
-					timeStepCounter++;
-				}
-
-				render(gc, game);
-			}
-		}.start();
 	}
 
 	private void render(final GraphicsContext gc, final Game game) {
 		gc.clearRect(0, 0, Utils.G_WIDTH, Utils.G_HEIGHT);
 
-		// TODO render graphics
+		gc.setFill(Color.BLACK);
+		gc.fillOval(game.getBallXPos(), game.getBallYPos(), Utils.BALL_RADIUS, Utils.BALL_RADIUS);
+
 		gc.setFill(Color.DARKCYAN);
 		gc.fillRect(game.getPaddleXPos(), Utils.G_HEIGHT - Utils.PADDLE_HEIGHT * 2 - 10,
 				Utils.DEFAULT_PADDLE_WIDTH, Utils.PADDLE_HEIGHT);

@@ -5,6 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import logic.Physics;
 import utils.Utils;
 
 import java.text.DecimalFormat;
@@ -16,9 +17,15 @@ public class Controller {
 	public Label menuTitle;
 	public Canvas canvas;
 
+	private final Physics physics;
+
 	private long startTime;
 	private long frameCounter;
 	private double fps;
+
+	public Controller(Physics physics) {
+		this.physics = physics;
+	}
 
 	public void initialize() {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -27,6 +34,11 @@ public class Controller {
 		new AnimationTimer() {
 			@Override
 			public void handle(long now) {
+				// TODO delta for specifying when the logic is going to be updated
+				// TODO update physics/logic
+				physics.update();
+
+
 				render(gc);
 			}
 		}.start();
@@ -37,7 +49,7 @@ public class Controller {
 
 		// TODO render graphics
 		gc.setFill(Color.DARKCYAN);
-		gc.fillRect(Utils.G_WIDTH / 2 - Utils.DEFAULT_PADDLE_WIDTH / 2, Utils.G_HEIGHT - Utils.PADDLE_HEIGHT * 2 - 10,
+		gc.fillRect(physics.getPaddleXPos(), Utils.G_HEIGHT - Utils.PADDLE_HEIGHT * 2 - 10,
 				Utils.DEFAULT_PADDLE_WIDTH, Utils.PADDLE_HEIGHT);
 
 		// Draws fps info in top left corner

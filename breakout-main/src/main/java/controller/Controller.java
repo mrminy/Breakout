@@ -8,6 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import logic.Game;
+import model.Board;
 import utils.Utils;
 
 import java.text.DecimalFormat;
@@ -27,11 +28,12 @@ public class Controller {
 	private double dt = 1000.0 / targetFps;
 	private double accumulator = 0.0;
 
+	private Game game;
 	private boolean leftKey = false, rightKey = false;
 
 	public void initialize() {
 		final GraphicsContext gc = canvas.getGraphicsContext2D();
-		final Game game = new Game();
+		game = new Game();
 
 		addKeyHandlers();
 
@@ -47,14 +49,16 @@ public class Controller {
 					// TODO update game/logic
 					game.update(leftKey, rightKey);
 					accumulator -= dt;
+
+					// Render the changes
+					render(gc, game);
 				}
 
-				render(gc, game);
 			}
 		}.start();
 	}
 
-	private void addKeyHandlers(){
+	private void addKeyHandlers() {
 		canvas.setFocusTraversable(true);
 		canvas.addEventHandler(KeyEvent.KEY_PRESSED, new javafx.event.EventHandler<KeyEvent>() {
 			public void handle(KeyEvent event) {
@@ -62,6 +66,10 @@ public class Controller {
 					leftKey = true;
 				} else if (event.getCode() == KeyCode.RIGHT) {
 					rightKey = true;
+				} else if (event.getCode() == KeyCode.SPACE) {
+					game.startStop();
+				}else if(event.getCode() == KeyCode.ESCAPE){
+					game.reset();
 				}
 			}
 		});
@@ -86,6 +94,19 @@ public class Controller {
 		gc.setFill(Color.DARKCYAN);
 		gc.fillRect(game.getPaddleXPos(), Utils.G_HEIGHT - Utils.PADDLE_HEIGHT * 2 - 10,
 				Utils.DEFAULT_PADDLE_WIDTH, Utils.PADDLE_HEIGHT);
+
+		gc.setFill(Color.CHOCOLATE);
+		Board board = game.getBoard();
+		double cellWidth = Utils.G_WIDTH / board.getCols();
+		for (int r = 0; r < board.getRows(); r++) {
+			for (int c = 0; c < board.getCols(); c++) {
+				if (board.isCellAlive(r, c)) {
+					// Draw cell
+					gc.fillRect(c * cellWidth, r * Utils.DEFAULT_BOARD_CELL_HEIGHT + Utils.BOARD_TOP_MARGIN,
+							cellWidth, Utils.DEFAULT_BOARD_CELL_HEIGHT);
+				}
+			}
+		}
 
 		// Draws fps info in top left corner
 		drawFpsInfo(gc);

@@ -3,6 +3,8 @@ package logic;
 import model.Ball;
 import model.Board;
 import model.Paddle;
+import utils.Utils;
+import utils.Vector;
 
 import static utils.Utils.DEFAULT_PADDLE_WIDTH;
 import static utils.Utils.G_WIDTH;
@@ -16,11 +18,25 @@ public class Game {
 	private final Paddle paddle;
 	private final Board board;
 	private final Ball ball;
+	private boolean isRunning;
 
 	public Game() {
 		this.paddle = new Paddle();
 		this.board = new Board();
 		this.ball = new Ball();
+	}
+
+	public void startStop() {
+		isRunning = !isRunning;
+		if (isRunning) {
+			ball.setDirection(Vector.generateRandomDirectionDownOrUp(false));
+		}
+	}
+
+	public void reset(){
+		isRunning = false;
+		board.reset();
+		ball.reset();
 	}
 
 	public Paddle getPaddle() {
@@ -44,7 +60,6 @@ public class Game {
 	}
 
 	public void update(boolean leftKey, boolean rightKey) {
-		// TODO update the state based on the left/rightKey is true
 		boolean isLeftMovePossible = paddle.getX() >= PADDLE_DEFAULT_SPEED;
 		boolean isRightMovePossible = paddle.getX() <= G_WIDTH - DEFAULT_PADDLE_WIDTH - PADDLE_DEFAULT_SPEED;
 		if (leftKey && isLeftMovePossible) {
@@ -52,6 +67,18 @@ public class Game {
 		} else if (rightKey && isRightMovePossible) {
 			paddle.move(PADDLE_DEFAULT_SPEED);
 		}
+
+		// Things that only should move if game is running
+		if (isRunning) {
+			moveBallOneStep();
+		}
+	}
+
+	private void moveBallOneStep() {
+		double dir = ball.getDirection();
+		double xVec = Utils.BALL_SPEED * Math.cos(dir);
+		double yVec = Utils.BALL_SPEED * Math.sin(dir);
+		ball.move(xVec, yVec);
 	}
 
 }

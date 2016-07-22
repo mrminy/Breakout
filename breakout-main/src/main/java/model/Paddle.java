@@ -1,15 +1,15 @@
 package model;
 
-import utils.Position;
+import utils.Vector;
 
 /**
  * Created by mikkel on 21-Jul-16.
  */
 public class Paddle {
-	private final Position position;
+	private final Vector position;
 
 	public Paddle() {
-		position = new Position(100, 0);
+		position = new Vector(100, 0);
 	}
 
 	public double getY() {
